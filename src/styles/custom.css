@@ -1,11 +1,13 @@
 /*
- * Overrides Starlight's default theme tokens: Lexend as the main UI/body
- * font, JetBrains Mono for code, and a purple brand accent — replacing the
- * teal/Segoe pass from the first migration per a later design request.
+ * Overrides Starlight's default theme tokens: Plus Jakarta Sans for body
+ * text, Lexend for headings/titles/UI labels, JetBrains Mono for code, and
+ * a purple brand accent — replacing the teal/Segoe pass from the first
+ * migration per a later design request.
  */
 
 :root {
-	--sl-font: 'Lexend', ui-sans-serif, system-ui, -apple-system, sans-serif;
+	--sl-font: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+	--ta-font-heading: 'Lexend', ui-sans-serif, system-ui, -apple-system, sans-serif;
 	--sl-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
 	/* Dark mode accent — purple */
@@ -28,13 +30,21 @@
 	--sl-color-hairline-shade: #e6e1f5;
 }
 
-/* Headings lean on Lexend's bolder weights for more presence */
+/* Lexend is reserved for headings and short UI labels — buttons, card
+   titles, aside titles, the nav site title — everything else (body copy,
+   sidebar, table of contents) reads in Plus Jakarta Sans (--sl-font). */
 h1,
 h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+.card .title,
+.sl-link-button,
+.starlight-aside__title,
+.site-title .title-main,
+.ta-recent-title {
+	font-family: var(--ta-font-heading);
 	font-weight: 600;
 }
 

@@ -117,9 +117,13 @@ Astro optimizes images referenced this way automatically (resizing, format conve
 
 The default Starlight theme is overridden to move away from the generic "developer docs" starter look:
 
-- **Fonts**: [Lexend](https://fonts.google.com/specimen/Lexend) for UI/body text, [JetBrains Mono](https://www.jetbrains.com/lp/mono/) for code — self-hosted via `@fontsource/*` packages, loaded in `astro.config.mjs`'s `customCss`.
+- **Fonts**: two-font pairing, self-hosted via `@fontsource/*` packages (loaded in `astro.config.mjs`'s `customCss`):
+  - [Lexend](https://fonts.google.com/specimen/Lexend) for headings and short UI labels (buttons, card titles, aside titles, the nav site title) — applied via `--ta-font-heading` in `src/styles/custom.css`, targeted at those elements specifically.
+  - [Plus Jakarta Sans](https://fonts.google.com/specimen/Plus+Jakarta+Sans) for body copy, sidebar, and table of contents — Starlight's base `--sl-font`, so it's the default everywhere Lexend isn't explicitly applied.
+  - [JetBrains Mono](https://www.jetbrains.com/lp/mono/) for code.
 - **Color**: a purple accent (`src/styles/custom.css`, Starlight's `--sl-color-accent*` tokens), with matching card/aside/hero styling.
 - `src/components/Footer.astro` — adds the author byline described above.
+- `src/components/SiteTitle.astro` (a Starlight component override) — adds the "Documentation Hub" subtitle under the site name in the nav header.
 
 The site logo/favicon (`src/assets/logo.png`, `public/favicon.ico`) is unrelated to this theming pass and hasn't been changed. Everything else (sidebar, search, mobile nav, table of contents, dark mode toggle) is Starlight's native behavior, unmodified.
 

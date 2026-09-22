@@ -1,6 +1,10 @@
 # Redirects from the old Jekyll/just-the-docs permalinks so existing
-# bookmarks and links to ta-wiki.nodr.me keep working after the migration
-# to Astro Starlight.
+# bookmarked paths keep working after the migration to Astro Starlight.
+# Note: this only rewrites paths on whatever domain serves this site. The
+# old site was on ta-wiki.nodr.me; this one is on wiki.tasw.qzz.io. If
+# ta-wiki.nodr.me needs to keep working too, that requires a separate
+# domain-level redirect (e.g. pointing it at this Cloudflare Pages project,
+# or a redirect rule at wherever that domain is currently hosted).
 /technical-guides                        /
 /technical-guides/mac                    /macos/
 /technical-guides/misc                   /windows/

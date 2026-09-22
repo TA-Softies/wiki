@@ -1,35 +1,89 @@
 /*
- * Overrides Starlight's default theme tokens to move the site away from the
- * default "dev docs" look toward the approved mockup: a warmer, office/intranet
- * feel (https://claude.ai/artifact/WqevqJbac8nv7TY8dnRUry) — a Segoe-based font
- * stack and a deep teal accent instead of the starter's blue/purple defaults.
+ * Overrides Starlight's default theme tokens: Lexend as the main UI/body
+ * font, JetBrains Mono for code, and a purple brand accent — replacing the
+ * teal/Segoe pass from the first migration per a later design request.
  */
 
 :root {
-	--sl-font: 'Segoe UI Variable', 'Segoe UI', ui-sans-serif, system-ui, -apple-system, sans-serif;
+	--sl-font: 'Lexend', ui-sans-serif, system-ui, -apple-system, sans-serif;
+	--sl-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-	/* Dark mode accent */
-	--sl-color-accent-low: #163541;
-	--sl-color-accent: #3ea4c4;
-	--sl-color-accent-high: #bfe3ec;
+	/* Dark mode accent — purple */
+	--sl-color-accent-low: #3b1e6d;
+	--sl-color-accent: #a78bfa;
+	--sl-color-accent-high: #e9e1fc;
 }
 
 :root[data-theme='light'] {
-	/* Light mode accent — the primary teal-navy from the approved mockup */
-	--sl-color-accent-low: #dce9ee;
-	--sl-color-accent: #1e4e5f;
-	--sl-color-accent-high: #123240;
+	/* Light mode accent — purple */
+	--sl-color-accent-low: #ede9fe;
+	--sl-color-accent: #7c3aed;
+	--sl-color-accent-high: #4c1d95;
 
-	--sl-color-bg: #f5f6f7;
+	--sl-color-bg: #faf9fd;
 	--sl-color-bg-nav: #ffffff;
 	--sl-color-bg-sidebar: #ffffff;
-	--sl-color-hairline: #e2e5e8;
-	--sl-color-hairline-light: #e2e5e8;
-	--sl-color-hairline-shade: #e2e5e8;
+	--sl-color-hairline: #e6e1f5;
+	--sl-color-hairline-light: #e6e1f5;
+	--sl-color-hairline-shade: #e6e1f5;
 }
 
-/* Cards (used on the hub page) get the mockup's rounder, flatter look */
-.sl-markdown-content .card,
+/* Headings lean on Lexend's bolder weights for more presence */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: 600;
+}
+
+/* Cards (hub page quick-access tiles) get the brand accent instead of
+   Starlight's default rainbow-per-card rotation, plus rounder corners,
+   a soft resting shadow, and a lift-on-hover for a bit of depth. */
 .card {
-	border-radius: 10px !important;
+	--sl-card-border: var(--sl-color-accent);
+	--sl-card-bg: var(--sl-color-accent-low);
+	border-radius: 12px !important;
+	box-shadow: var(--sl-shadow-sm);
+	transition:
+		transform 0.15s ease,
+		box-shadow 0.15s ease,
+		border-color 0.15s ease;
+}
+.card:hover {
+	transform: translateY(-2px);
+	box-shadow: var(--sl-shadow-md);
+	border-color: var(--sl-color-accent);
+}
+.card .icon {
+	border-radius: 8px;
+}
+
+/* Asides (callouts) get slightly rounder corners to match Lexend's
+   geometric, friendlier letterforms. */
+.starlight-aside {
+	border-radius: 0 8px 8px 0;
+}
+
+/* A soft glow behind the hero title/tagline instead of a flat block —
+   subtle radial blur in the brand purple, common on modern landing pages. */
+.hero {
+	position: relative;
+}
+.hero::before {
+	content: '';
+	position: absolute;
+	inset: -4rem -4rem auto -4rem;
+	height: 26rem;
+	background: radial-gradient(45rem 18rem at 15% 20%, var(--sl-color-accent-low), transparent 70%);
+	opacity: 0.6;
+	z-index: -1;
+	pointer-events: none;
+}
+
+/* The recently-updated panel on the hub page gets the same elevated-surface
+   treatment as the quick-access cards. */
+.ta-recent {
+	box-shadow: var(--sl-shadow-sm);
 }

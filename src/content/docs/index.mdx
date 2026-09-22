@@ -6,10 +6,14 @@ hero:
   title: Documentation Hub
   tagline: Procedures and setup guides for the APU Technical Assistant Software Functional Unit. Every page here is plain Markdown, version-controlled and reviewed on GitHub.
   actions:
+    - text: Get started
+      link: /macos/utm-setup/
+      icon: right-arrow
+      variant: primary
     - text: View source on GitHub
       link: https://github.com/TA-Softies/wiki
       icon: external
-      variant: minimal
+      variant: secondary
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
@@ -19,9 +23,9 @@ import RecentlyUpdated from '../../components/RecentlyUpdated.astro';
 
 <CardGrid>
 	<Card title="macOS Guides" icon="apple">
-		NoLoAD, UTM, and other Mac setup & support procedures.
+		UTM and other Mac setup & support procedures.
 
-		[Browse macOS Guides →](/macos/noload-setup/)
+		[Browse macOS Guides →](/macos/utm-setup/)
 	</Card>
 	<Card title="Windows & Lab Systems" icon="seti:windows">
 		Reimaging, lab workstation upkeep and TechCentre procedures.

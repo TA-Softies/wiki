@@ -6,9 +6,12 @@ const SECTION_LABELS: Record<string, string> = {
 	macos: 'macOS Guides',
 	windows: 'Windows & Lab Systems',
 	'software-fu': 'Software FU Procedures',
+	archive: 'Archived',
 };
 
-const docs = await getCollection('docs', (doc) => doc.id !== 'index');
+// Archived pages are excluded: editing one to add the archive banner bumps
+// its git date, which would otherwise make a stale page look "recent".
+const docs = await getCollection('docs', (doc) => doc.id !== 'index' && !doc.id.startsWith('archive/'));
 
 const entries = docs
 	.map((doc) => {

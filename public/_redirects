@@ -8,7 +8,10 @@
 /technical-guides                        /
 /technical-guides/mac                    /macos/
 /technical-guides/misc                   /windows/
-/technical-guides/misc/noload-setup      /macos/noload-setup/
+/technical-guides/misc/noload-setup      /archive/noload-setup/
 /technical-guides/misc/utm-setup         /macos/utm-setup/
 /technical-guides/misc/reimaging-guide   /windows/reimaging-guide/
 /softwarefu-guides                       /software-fu/overview/
+
+# NoLoAD setup moved to the Archived section
+/macos/noload-setup                      /archive/noload-setup/

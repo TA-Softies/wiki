@@ -1,25 +1,19 @@
 ---
-layout: default
-parent: Misc
-title: NoLoAD Setup
-nav_order: 3
-has_children: false
-permalink: /technical-guides/misc/noload-setup
+title: NoLoAD Environment Setup Guide
+description: Configure NoLoAD (NoMAD Login AD) on macOS so users can log in with their Domain Account without binding the Mac to APU's Active Directory domain.
 ---
-
-# NoLoAD Environment Setup Guide
 
 ## Overview
 
 This guide offers step-by-step instructions for configuring NoLoAD (NoMAD Login AD) on macOS, enabling users to log in with their Domain Accounts without binding the system directly to a specific Domain. NoLoAD provides a streamlined solution for seamless domain authentication on Mac devices.
 
-{: .important-title }
-> **APU Network Specific Configuration**
->
-> This guide and configuration are specifically designed for use on **Asia Pacific University (APU)'s Network**. The included configuration files, DNS settings, and domain references are all configured for APU's technical infrastructure. If you're setting up NoLoAD elsewhere, you'll need a different configuration.
+:::caution[APU network specific configuration]
+This guide and configuration are specifically designed for use on **Asia Pacific University (APU)'s Network**. The included configuration files, DNS settings, and domain references are all configured for APU's technical infrastructure. If you're setting up NoLoAD elsewhere, you'll need a different configuration.
+:::
 
-{: .note }
+:::note
 NoLoAD is ideal for educational and enterprise settings where centralized user management is needed. It enables domain logins on Macs, which cannot fully join Active Directory domains similar to Windows devices.
+:::
 
 ## Prerequisites
 
@@ -28,21 +22,17 @@ NoLoAD is ideal for educational and enterprise settings where centralized user m
 - Access to the institution's network (either via WiFi or Ethernet connection)
 - Basic familiarity with macOS
 
-{: .warning }
+:::danger
 Some steps in this installation may require administrator privileges on the Mac. If you don't have admin access, please contact your fellow TAs for assistance.
-
-## Contents
-{: .no_toc }
-
-1. TOC
-{:toc}
+:::
 
 ## Installation Steps
 
 ### Step 0: Ensure the Device Can Connect to the Domain Controller
 
-{: .important }  
+:::caution
 Before installing NoLoAD, verify that your Mac can connect to the domain network. NoLoAD requires proper connectivity to function.
+:::
 
 1. **Check Network Connection**
    - Ensure your Mac is connected to the **"IOT@APU" WiFi** network or via **Ethernet (LAN)**.
@@ -65,20 +55,23 @@ Before installing NoLoAD, verify that your Mac can connect to the domain network
    - Add the DNS server: `10.61.20.33`
    - Click **OK** > **Apply**
 
-   ![DNS Configuration](/assets/NoLoAD/DNS.png)
-    <div align="center"><em>Fig 1: Adding APU's DNS server in macOS Network settings</em></div>
+   ![DNS Configuration](../../../assets/images/noload/DNS.png)
 
-{: .warning }  
+   *Fig 1: Adding APU's DNS server in macOS Network settings*
+
+:::danger
 Incorrect DNS settings will prevent your Mac from locating the domain controller, causing NoLoAD setup to fail.
+:::
 
 ---
 
 ### Step 1: Download and Install NoLoAD
 
-{: .important }
+:::caution
 If you're using system restore solutions like **Deep Freeze** or similar, you must **temporarily disable** them before installing NoLoAD or making any configuration changes. Once setup is complete and verified, you may re-enable the restore protection. Failure to do so may cause configuration loss after a reboot.
+:::
 
-1. **Download the Installer**  
+1. **Download the Installer**
    [Download NoLoAD](https://cloudmails-my.sharepoint.com/:f:/g/personal/abdulla_meesum_cloudmails_apu_edu_my/Egu45iVTsFhIig7rMZiTSvIB6W8RVw7TvMUt3vDUnFLt3g?e=ENgZPc) (NoMAD-Login-AD.pkg) from the shared OneDrive folder and save it (typically in the **Downloads** folder).
 
 2. **Run the Installer**
@@ -90,14 +83,15 @@ If you're using system restore solutions like **Deep Freeze** or similar, you mu
      - Choose your main drive and click **Install**.
      - Enter your admin password when prompted.
 
-{: .note }  
+:::note
 Installation may take a few minutes. Avoid interrupting the process.
+:::
 
 ---
 
 ### Step 2: Install the Configuration Profile
 
-1. **Download the Configuration File**  
+1. **Download the Configuration File**
    [Download `.mobileconfig` file](https://cloudmails-my.sharepoint.com/:f:/g/personal/abdulla_meesum_cloudmails_apu_edu_my/Egu45iVTsFhIig7rMZiTSvIB6W8RVw7TvMUt3vDUnFLt3g?e=ENgZPc) from the shared OneDrive folder
 
 2. **Install the Profile**
@@ -105,14 +99,15 @@ Installation may take a few minutes. Avoid interrupting the process.
    - System Preferences (or System Settings) will open to **Profiles**.
    - Click **Install**, authenticate if prompted, and confirm any warnings.
 
-{: .warning }  
+:::danger
 If installation doesn't start automatically, go to System Preferences > **Profiles** (or Settings > Privacy & Security > Profiles), click **+**, and add the downloaded file manually.
+:::
 
 ---
 
 ### Step 3: Set Up the Lockscreen Assets
 
-1. **Download Assets**  
+1. **Download Assets**
    [Download lockscreen ZIP](https://cloudmails-my.sharepoint.com/:f:/g/personal/abdulla_meesum_cloudmails_apu_edu_my/Egu45iVTsFhIig7rMZiTSvIB6W8RVw7TvMUt3vDUnFLt3g?e=ENgZPc) from the shared OneDrive folder
 
 2. **Extract the ZIP**
@@ -137,8 +132,9 @@ If installation doesn't start automatically, go to System Preferences > **Profil
    - Click the lock icon, enter your password, and set permissions to **Read & Write** for all users.
    - Click the gear icon > **Apply to enclosed items**
 
-{: .important }  
+:::caution
 Improper permissions may prevent the login screen from displaying correctly.
+:::
 
 ## Post Setup Steps
 
@@ -152,69 +148,69 @@ Improper permissions may prevent the login screen from displaying correctly.
 
 3. To test domain authentication:
    - Enter your domain username in one of the following formats:
-      - username@techlab.apiit.edu.my
-      - or simply username (the domain has already been configured in the configuration file)
+     - username@techlab.apiit.edu.my
+     - or simply username (the domain has already been configured in the configuration file)
    - Enter your domain password
    - Click the "Log In" button or press Return
 
-{: .note }
-Domain accounts logged into the Mac will remain stored locally on the machine, even after logout—just like on Windows. These accounts will persist until manually deleted.
+:::note
+Domain accounts logged into the Mac will remain stored locally on the machine, even after logout — just like on Windows. These accounts will persist until manually deleted.
+:::
 
-{: .note-title }
-> **Troubleshooting**
->
-> If the custom login screen doesn't appear or domain authentication fails:
-> - Restart your Mac to ensure all changes take effect
-> - Verify your network connection and DNS settings
-> - Check that the NoLoAD service is running by opening Terminal and typing: `sudo launchctl list | grep NoMAD`
-> - If issues persist, you might need to reinstall the NoLoAD package
-
+:::note[Troubleshooting]
+If the custom login screen doesn't appear or domain authentication fails:
+- Restart your Mac to ensure all changes take effect
+- Verify your network connection and DNS settings
+- Check that the NoLoAD service is running by opening Terminal and typing: `sudo launchctl list | grep NoMAD`
+- If issues persist, you might need to reinstall the NoLoAD package
+:::
 
 ### Managing Domain User Profiles
 
 Over time, a Mac with NoLoAD may accumulate multiple domain user profiles. For maintenance or troubleshooting purposes, you may need to remove these profiles.
 
-{: .warning }
+:::danger
 Both methods permanently remove user accounts and their associated data from the Mac. Ensure any important files are backed up before proceeding.
+:::
 
 #### Automated Removal Method
 
 1. **Download the Removal Script**
-    - [Download the `remove_ad_users.sh` script](https://cloudmails-my.sharepoint.com/:f:/g/personal/abdulla_meesum_cloudmails_apu_edu_my/Egu45iVTsFhIig7rMZiTSvIB6W8RVw7TvMUt3vDUnFLt3g?e=ENgZPc) from the shared OneDrive folder
+   - [Download the `remove_ad_users.sh` script](https://cloudmails-my.sharepoint.com/:f:/g/personal/abdulla_meesum_cloudmails_apu_edu_my/Egu45iVTsFhIig7rMZiTSvIB6W8RVw7TvMUt3vDUnFLt3g?e=ENgZPc) from the shared OneDrive folder
 
 2. **Run the Script to Remove Domain Users**
-    - Open **Terminal** (Applications > Utilities > Terminal)
-    - Navigate to your Downloads folder:
-      ```bash
-      cd ~/Downloads
-      ```
-    - Make the script executable:
-      ```bash
-      chmod +x remove_ad_users.sh
-      ```
-    - Run the script with admin privileges in one of two modes:
-      
-      **Dry Run Mode** (safely preview changes without making them):
-      ```bash
-      sudo ./remove_ad_users.sh --dry-run
-      ```
-      
-      **Normal Mode** (actually remove users):
-      ```bash
-      sudo ./remove_ad_users.sh
-      ```
-      
-    - The script will:
-      1. Scan and identify all Active Directory (AD) users on the Mac
-      2. Display a list of all found AD users with their account names
-      3. Ask for confirmation before proceeding
-      4. If confirmed, remove all AD user accounts and associated data:
-         - User account entries
-         - Home directories
-         - System preference files
-         - Application caches
-         - Temporary files
-         - Various user-related data throughout the system
+   - Open **Terminal** (Applications > Utilities > Terminal)
+   - Navigate to your Downloads folder:
+     ```bash
+     cd ~/Downloads
+     ```
+   - Make the script executable:
+     ```bash
+     chmod +x remove_ad_users.sh
+     ```
+   - Run the script with admin privileges in one of two modes:
+
+     **Dry Run Mode** (safely preview changes without making them):
+     ```bash
+     sudo ./remove_ad_users.sh --dry-run
+     ```
+
+     **Normal Mode** (actually remove users):
+     ```bash
+     sudo ./remove_ad_users.sh
+     ```
+
+   - The script will:
+     1. Scan and identify all Active Directory (AD) users on the Mac
+     2. Display a list of all found AD users with their account names
+     3. Ask for confirmation before proceeding
+     4. If confirmed, remove all AD user accounts and associated data:
+        - User account entries
+        - Home directories
+        - System preference files
+        - Application caches
+        - Temporary files
+        - Various user-related data throughout the system
 
 #### Manual Removal Method
 
@@ -232,18 +228,17 @@ If you prefer to remove domain users manually:
    - Select the domain user account you wish to remove from the list on the left
    - Click the minus (-) button below the list
    - In the dialog that appears, choose one of the options:
-    - In the dialog that appears, choose one of the options:
-      - **"Delete the home folder"** (removes all user data, recommended)
-      - "Save the home folder in a disk image" (preserves data)
-      - "Don't change the home folder" (leaves data intact)
+     - **"Delete the home folder"** (removes all user data, recommended)
+     - "Save the home folder in a disk image" (preserves data)
+     - "Don't change the home folder" (leaves data intact)
    - Click "Delete User"
 
 4. **Repeat as Needed**
    - Follow the same process for each domain user account you want to remove
 
-{: .note }
+:::note
 Removing user profiles periodically on lab computers helps maintain system hygiene and free up disk space.
-
+:::
 
 ---
 
@@ -264,5 +259,6 @@ If you need to uninstall NoLoAD for any reason:
    ```
 5. Restart your Mac after the uninstallation completes
 
-{: .warning }
-Uninstalling NoLoAD will revert your Mac to the standard login system. Domain users may no longer be able to log in without additional configuration
+:::danger
+Uninstalling NoLoAD will revert your Mac to the standard login system. Domain users may no longer be able to log in without additional configuration.
+:::

@@ -1,0 +1,131 @@
+---
+import { getCollection } from 'astro:content';
+import { getLastGitMeta } from '../lib/gitAuthor';
+
+const SECTION_LABELS: Record<string, string> = {
+	macos: 'macOS Guides',
+	windows: 'Windows & Lab Systems',
+	'software-fu': 'Software FU Procedures',
+};
+
+const docs = await getCollection('docs', (doc) => doc.id !== 'index');
+
+const entries = docs
+	.map((doc) => {
+		const section = doc.id.split('/')[0] ?? '';
+		const meta = doc.filePath ? getLastGitMeta(doc.filePath) : { author: null, date: null };
+		return {
+			title: doc.data.title,
+			href: `/${doc.id}/`,
+			section: SECTION_LABELS[section] ?? section,
+			author: meta.author,
+			date: meta.date,
+		};
+	})
+	.filter((entry): entry is typeof entry & { author: string; date: string } => Boolean(entry.author && entry.date))
+	.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+	.slice(0, 6);
+
+function initials(name: string) {
+	return name
+		.split(' ')
+		.filter(Boolean)
+		.map((part) => part[0])
+		.join('')
+		.slice(0, 2)
+		.toUpperCase();
+}
+
+function formatDate(iso: string) {
+	return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+---
+
+{
+	entries.length > 0 && (
+		<div class="ta-recent">
+			{entries.map((entry) => (
+				<a class="ta-recent-row" href={entry.href}>
+					<span class="ta-recent-title">{entry.title}</span>
+					<span class="ta-recent-section">{entry.section}</span>
+					<span class="ta-recent-author">
+						<span class="ta-avatar">{initials(entry.author)}</span>
+						{entry.author}
+					</span>
+					<span class="ta-recent-date">{formatDate(entry.date)}</span>
+				</a>
+			))}
+		</div>
+	)
+}
+
+<style>
+	.ta-recent {
+		display: flex;
+		flex-direction: column;
+		border: 1px solid var(--sl-color-hairline);
+		border-radius: 10px;
+		overflow: hidden;
+		background: var(--sl-color-bg-nav);
+	}
+
+	.ta-recent-row {
+		display: grid;
+		grid-template-columns: 1fr auto auto auto;
+		align-items: center;
+		gap: 1.5rem;
+		padding: 0.85rem 1.25rem;
+		border-bottom: 1px solid var(--sl-color-hairline);
+		color: var(--sl-color-text);
+		text-decoration: none;
+		font-size: var(--sl-text-sm);
+	}
+	.ta-recent-row:last-child {
+		border-bottom: none;
+	}
+	.ta-recent-row:hover {
+		background: var(--sl-color-accent-low);
+	}
+
+	.ta-recent-title {
+		font-weight: 600;
+		color: var(--sl-color-white);
+	}
+	.ta-recent-section {
+		color: var(--sl-color-gray-3);
+		white-space: nowrap;
+	}
+	.ta-recent-author {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		white-space: nowrap;
+	}
+	.ta-avatar {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 1.5rem;
+		height: 1.5rem;
+		border-radius: 50%;
+		background: var(--sl-color-accent);
+		color: var(--sl-color-text-invert);
+		font-size: 0.65rem;
+		font-weight: 700;
+		flex-shrink: 0;
+	}
+	.ta-recent-date {
+		color: var(--sl-color-gray-3);
+		white-space: nowrap;
+	}
+
+	@media (max-width: 50rem) {
+		.ta-recent-row {
+			grid-template-columns: 1fr;
+			gap: 0.4rem;
+		}
+		.ta-recent-date::before {
+			content: '· ';
+		}
+	}
+</style>

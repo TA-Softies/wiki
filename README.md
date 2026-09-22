@@ -107,12 +107,21 @@ Everything else (sidebar, search, mobile nav, table of contents, dark mode toggl
 
 ## Deployment
 
-The site deploys to **Cloudflare Pages** via its GitHub git integration (project connected in the Cloudflare dashboard — not a GitHub Action):
+The site is live at **wiki.tasw.qzz.io**, deployed via Cloudflare's Workers Builds (project name `sw-wiki`, connected to this repo's `main` branch in the Cloudflare dashboard — not a GitHub Action). Each push runs `npm run build`, then `wrangler.jsonc` tells `wrangler deploy` to publish `dist/` as static assets:
 
-- Build command: `npm run build`
-- Output directory: `dist`
-- Framework preset: Astro
+```jsonc
+{
+	"name": "sw-wiki",
+	"compatibility_date": "2026-09-23",
+	"assets": {
+		"directory": "./dist",
+		"not_found_handling": "404-page"
+	}
+}
+```
 
-`public/_redirects` maps the old Jekyll site's URLs to their new paths, so existing bookmarks/links to `ta-wiki.nodr.me` keep working.
+`wrangler.jsonc` matters more than it looks: without it, Wrangler auto-detects "this is an Astro project" and runs `astro add cloudflare` to bolt on the SSR adapter (Cloudflare Images/Sessions bindings), which this static site doesn't need and which broke the build the first time. Don't remove this file or add `@astrojs/cloudflare` unless the site actually needs server-side rendering.
+
+`public/_redirects` maps the old Jekyll site's URLs to their new paths. It only rewrites paths on whatever domain serves this deployment — the old site was on `ta-wiki.nodr.me`, this one is on `wiki.tasw.qzz.io`, so if the old domain's bookmarks need to keep working too, that needs a separate domain-level redirect.
 
 `.github/workflows/ci.yml` only runs `npm run build` as a PR sanity check — it does not deploy anything.

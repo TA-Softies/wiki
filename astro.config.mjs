@@ -4,7 +4,7 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://ta-wiki.nodr.me',
+	site: 'https://wiki.tasw.qzz.io',
 	integrations: [
 		starlight({
 			title: 'TA Software FU Wiki',

@@ -24,12 +24,15 @@ export default defineConfig({
 			pagination: false,
 			components: {
 				Footer: './src/components/Footer.astro',
+				SiteTitle: './src/components/SiteTitle.astro',
 			},
 			customCss: [
-				'@fontsource/lexend/400.css',
 				'@fontsource/lexend/500.css',
 				'@fontsource/lexend/600.css',
 				'@fontsource/lexend/700.css',
+				'@fontsource/plus-jakarta-sans/400.css',
+				'@fontsource/plus-jakarta-sans/500.css',
+				'@fontsource/plus-jakarta-sans/600.css',
 				'@fontsource/jetbrains-mono/400.css',
 				'@fontsource/jetbrains-mono/500.css',
 				'./src/styles/custom.css',

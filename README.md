@@ -1,174 +1,118 @@
-# just-the-docs-template
+# TA Software FU Wiki
 
-This is a *bare-minimum* template to create a [Jekyll] site that:
+Documentation hub for the APU Technical Assistant Software Functional Unit — procedures, setup guides and reference material. Built with [Astro Starlight](https://starlight.astro.build), written in plain Markdown, deployed on Cloudflare Pages. All source, docs included, lives in this repo.
 
-- uses the [Just the Docs] theme;
-- can be built and published on [GitHub Pages];
-- can be built and previewed locally, and published on other platforms.
+## Local development
 
-More specifically, the created site:
+```bash
+npm install
+npm run dev       # http://localhost:4321
+npm run build     # outputs to dist/
+npm run preview   # serve the built site locally
+```
 
-- uses a gem-based approach, i.e. uses a `Gemfile` and loads the `just-the-docs` gem;
-- uses the [GitHub Pages / Actions workflow] to build and publish the site on GitHub Pages.
+Every page shows a "Last updated" date and an "Edited by" name pulled straight from `git log` at build time (see [How the byline works](#how-the-byline--last-updated-works)), so those only appear correctly once a page has at least one commit — a brand-new, uncommitted page just won't show one yet.
 
-To get started with creating a site, simply:
+## Page structure
 
-1. click "[use this template]" to create a GitHub repository
-2. go to Settings > Pages > Build and deployment > Source, and select GitHub Actions
+Every page is a Markdown file under `src/content/docs/`, one folder per sidebar section:
 
-If you want to maintain your docs in the `docs` directory of an existing project repo, see [Hosting your docs from an existing project repo](#hosting-your-docs-from-an-existing-project-repo).
+```
+src/content/docs/
+├── index.mdx              # the hub/home page
+├── macos/                  # "macOS Guides" section
+│   ├── noload-setup.md
+│   └── utm-setup.md
+├── windows/                 # "Windows & Lab Systems" section
+│   └── reimaging-guide.md
+└── software-fu/             # "Software FU Procedures" section
+    └── overview.md
+```
 
-After completing the creation of your new site on GitHub, update it as needed:
+The folder a page lives in **is** its sidebar section — Starlight autogenerates each section's sidebar entries from its folder (configured in `astro.config.mjs` under `starlight().sidebar`), sorted alphabetically by default. A page's URL matches its path, e.g. `src/content/docs/macos/utm-setup.md` → `/macos/utm-setup/`.
 
-## Replace the content of the template pages
+## Adding a new page
 
-Update the following files to your own content:
+1. Add a `.md` file under the right section folder (or create a new folder for a new section — see below).
+2. Give it front matter:
+   ```md
+   ---
+   title: Page Title
+   description: One sentence, used for search results and link previews.
+   ---
+   ```
+   Optional: `sidebar: { order: 1 }` to manually order it within its section (default is alphabetical).
+3. Write the body in plain Markdown. Headings automatically populate the right-hand "On this page" table of contents — no manual TOC markup needed.
+4. Commit and open a PR. `npm run build` runs in CI on every PR as a sanity check.
 
-- `index.md` (your new home page)
-- `README.md` (information for those who access your site repo on GitHub)
+### Adding a new section
 
-## Changing the version of the theme and/or Jekyll
+Create a new folder under `src/content/docs/`, add at least one page to it, then add an entry to the `sidebar` array in `astro.config.mjs`:
 
-Simply edit the relevant line(s) in the `Gemfile`.
+```js
+{
+  label: 'Your Section Label',
+  items: [{ autogenerate: { directory: 'your-folder-name' } }],
+},
+```
 
-## Adding a plugin
+If it should also appear as a quick-access card on the home page, add a `<Card>` to `src/content/docs/index.mdx`.
 
-The Just the Docs theme automatically includes the [`jekyll-seo-tag`] plugin.
+## Callouts
 
-To add an extra plugin, you need to add it in the `Gemfile` *and* in `_config.yml`. For example, to add [`jekyll-default-layout`]:
+Use Starlight's built-in [asides](https://starlight.astro.build/components/asides/) instead of custom HTML — this project's convention maps severity to type like this:
 
-- Add the following to your site's `Gemfile`:
+| Use for | Syntax |
+|---|---|
+| Critical / destructive actions | `:::danger` |
+| Important, must-follow instructions | `:::caution` |
+| General information | `:::note` |
 
-  ```ruby
-  gem "jekyll-default-layout"
-  ```
+```md
+:::caution
+Admin access is required for this step.
+:::
 
-- And add the following to your site's `_config.yml`:
+:::danger[Custom title]
+This step **permanently deletes data**. Back up first.
+:::
+```
 
-  ```yaml
-  plugins:
-    - jekyll-default-layout
-  ```
+A bracketed title (`:::caution[Custom title]`) is optional and replaces the default "Caution"/"Danger"/"Note" label.
 
-Note: If you are using a Jekyll version less than 3.5.0, use the `gems` key instead of `plugins`.
+## Images
 
-## Publishing your site on GitHub Pages
+Put images under `src/assets/images/<section>/` and reference them with a relative Markdown path:
 
-1.  If your created site is `YOUR-USERNAME/YOUR-SITE-NAME`, update `_config.yml` to:
+```md
+![Alt text describing the image](../../../assets/images/macos/screenshot.png)
+```
 
-    ```yaml
-    title: YOUR TITLE
-    description: YOUR DESCRIPTION
-    theme: just-the-docs
+Astro optimizes images referenced this way automatically (resizing, format conversion). Don't put new images in `public/` unless they need to be referenced by an absolute, unprocessed URL.
 
-    url: https://YOUR-USERNAME.github.io/YOUR-SITE-NAME
+## How the byline (last-updated / author) works
 
-    aux_links: # remove if you don't want this link to appear on your pages
-      Template Repository: https://github.com/YOUR-USERNAME/YOUR-SITE-NAME
-    ```
+- The "Last updated" date is Starlight's native `lastUpdated` feature — it reads each file's git history at build time.
+- The "Edited by" name is custom (Starlight doesn't have this built in): `src/lib/gitAuthor.ts` runs `git log -1` per file at build time, and `src/components/Footer.astro` (a Starlight [component override](https://starlight.astro.build/guides/overriding-components/)) renders it next to the date.
+- Both require the build machine to have real git history available — Cloudflare Pages' git integration does a full clone by default, so this works out of the box in production. Locally, it reflects whatever's actually committed on your branch.
 
-2.  Push your updated `_config.yml` to your site on GitHub.
+## Look and feel
 
-3.  In your newly created repo on GitHub:
-    - go to the `Settings` tab -> `Pages` -> `Build and deployment`, then select `Source`: `GitHub Actions`.
-    - if there were any failed Actions, go to the `Actions` tab and click on `Re-run jobs`.
+The default Starlight theme is overridden in two places to move away from the "developer docs" look toward a plainer, office/intranet feel:
 
-## Building and previewing your site locally
+- `src/styles/custom.css` — color and font tokens (Starlight's CSS custom properties, e.g. `--sl-color-accent`).
+- `src/components/Footer.astro` — adds the author byline described above.
 
-Assuming [Jekyll] and [Bundler] are installed on your computer:
+Everything else (sidebar, search, mobile nav, table of contents, dark mode toggle) is Starlight's native behavior, unmodified.
 
-1.  Change your working directory to the root directory of your site.
+## Deployment
 
-2.  Run `bundle install`.
+The site deploys to **Cloudflare Pages** via its GitHub git integration (project connected in the Cloudflare dashboard — not a GitHub Action):
 
-3.  Run `bundle exec jekyll serve` to build your site and preview it at `localhost:4000`.
+- Build command: `npm run build`
+- Output directory: `dist`
+- Framework preset: Astro
 
-    The built site is stored in the directory `_site`.
+`public/_redirects` maps the old Jekyll site's URLs to their new paths, so existing bookmarks/links to `ta-wiki.nodr.me` keep working.
 
-## Publishing your built site on a different platform
-
-Just upload all the files in the directory `_site`.
-
-## Customization
-
-You're free to customize sites that you create with this template, however you like!
-
-[Browse our documentation][Just the Docs] to learn more about how to use this theme.
-
-## Hosting your docs from an existing project repo
-
-You might want to maintain your docs in an existing project repo. Instead of creating a new repo using the [just-the-docs template](https://github.com/just-the-docs/just-the-docs-template), you can copy the template files into your existing repo and configure the template's Github Actions workflow to build from a `docs` directory. You can clone the template to your local machine or download the `.zip` file to access the files.
-
-### Copy the template files
-
-1.  Create a `.github/workflows` directory at your project root if your repo doesn't already have one. Copy the `pages.yml` file into this directory. GitHub Actions searches this directory for workflow files.
-
-2.  Create a `docs` directory at your project root and copy all remaining template files into this directory.
-
-### Modify the GitHub Actions workflow
-
-The GitHub Actions workflow that builds and deploys your site to Github Pages is defined by the `pages.yml` file. You'll need to edit this file to that so that your build and deploy steps look to your `docs` directory, rather than the project root.
-
-1.  Set the default `working-directory` param for the build job.
-
-    ```yaml
-    build:
-      runs-on: ubuntu-latest
-      defaults:
-        run:
-          working-directory: docs
-    ```
-
-2.  Set the `working-directory` param for the Setup Ruby step.
-
-    ```yaml
-    - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.3'
-          bundler-cache: true
-          cache-version: 0
-          working-directory: '${{ github.workspace }}/docs'
-    ```
-
-3.  Set the path param for the Upload artifact step:
-
-    ```yaml
-    - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: docs/_site/
-    ```
-
-4.  Modify the trigger so that only changes within the `docs` directory start the workflow. Otherwise, every change to your project (even those that don't affect the docs) would trigger a new site build and deploy.
-
-    ```yaml
-    on:
-      push:
-        branches:
-          - "main"
-        paths:
-          - "docs/**"
-    ```
-
-## Licensing and Attribution
-
-This repository is licensed under the [MIT License]. You are generally free to reuse or extend upon this code as you see fit; just include the original copy of the license (which is preserved when you "make a template"). While it's not necessary, we'd love to hear from you if you do use this template, and how we can improve it for future use!
-
-The deployment GitHub Actions workflow is heavily based on GitHub's mixed-party [starter workflows]. A copy of their MIT License is available in [actions/starter-workflows].
-
-----
-
-[^1]: [It can take up to 10 minutes for changes to your site to publish after you push the changes to GitHub](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/creating-a-github-pages-site-with-jekyll#creating-your-site).
-
-[Jekyll]: https://jekyllrb.com
-[Just the Docs]: https://just-the-docs.github.io/just-the-docs/
-[GitHub Pages]: https://docs.github.com/en/pages
-[GitHub Pages / Actions workflow]: https://github.blog/changelog/2022-07-27-github-pages-custom-github-actions-workflows-beta/
-[Bundler]: https://bundler.io
-[use this template]: https://github.com/just-the-docs/just-the-docs-template/generate
-[`jekyll-default-layout`]: https://github.com/benbalter/jekyll-default-layout
-[`jekyll-seo-tag`]: https://jekyll.github.io/jekyll-seo-tag
-[MIT License]: https://en.wikipedia.org/wiki/MIT_License
-[starter workflows]: https://github.com/actions/starter-workflows/blob/main/pages/jekyll.yml
-[actions/starter-workflows]: https://github.com/actions/starter-workflows/blob/main/LICENSE
+`.github/workflows/ci.yml` only runs `npm run build` as a PR sanity check — it does not deploy anything.

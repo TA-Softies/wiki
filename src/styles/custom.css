@@ -1,0 +1,35 @@
+/*
+ * Overrides Starlight's default theme tokens to move the site away from the
+ * default "dev docs" look toward the approved mockup: a warmer, office/intranet
+ * feel (https://claude.ai/artifact/WqevqJbac8nv7TY8dnRUry) — a Segoe-based font
+ * stack and a deep teal accent instead of the starter's blue/purple defaults.
+ */
+
+:root {
+	--sl-font: 'Segoe UI Variable', 'Segoe UI', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+	/* Dark mode accent */
+	--sl-color-accent-low: #163541;
+	--sl-color-accent: #3ea4c4;
+	--sl-color-accent-high: #bfe3ec;
+}
+
+:root[data-theme='light'] {
+	/* Light mode accent — the primary teal-navy from the approved mockup */
+	--sl-color-accent-low: #dce9ee;
+	--sl-color-accent: #1e4e5f;
+	--sl-color-accent-high: #123240;
+
+	--sl-color-bg: #f5f6f7;
+	--sl-color-bg-nav: #ffffff;
+	--sl-color-bg-sidebar: #ffffff;
+	--sl-color-hairline: #e2e5e8;
+	--sl-color-hairline-light: #e2e5e8;
+	--sl-color-hairline-shade: #e2e5e8;
+}
+
+/* Cards (used on the hub page) get the mockup's rounder, flatter look */
+.sl-markdown-content .card,
+.card {
+	border-radius: 10px !important;
+}

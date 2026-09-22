@@ -1,45 +1,37 @@
 ---
-layout: default
-parent: Misc
-title: Lab Drive Reimaging
-nav_order: 4
-has_children: false
-permalink: /technical-guides/misc/reimaging-guide
+title: Lab Drive Reimaging Guide
+description: Reimage SATA/NVMe lab workstation drives using Clonezilla at the TechCentre Reimaging Station.
 ---
-
-# Lab Drive Reimaging Guide
 
 ## Overview
 
 This guide provides step-by-step instructions for reimaging SATA/NVMe drives using the Reimaging Station in TechCentre. The process uses Clonezilla to restore lab workstation drives to a clean, standardized state with pre-configured Windows Lab images.
 
-{: .important-title }
-> **Lab PCs ONLY**
->
-> **CRITICAL:** This reimaging process is **ONLY** applicable to **Lab PCs/Workstations**. 
-> - **DO NOT** use this process on student personal computers
-> - **DO NOT** use this process on any non-lab equipment
->
-> Lab images are specifically configured for lab environments and will not work properly on other systems. Reimaging personal or non-lab computers may result in system failure, data loss, and licensing issues.
+:::caution[Lab PCs ONLY]
+**CRITICAL:** This reimaging process is **ONLY** applicable to **Lab PCs/Workstations**.
+- **DO NOT** use this process on student personal computers
+- **DO NOT** use this process on any non-lab equipment
 
-{: .warning-title }
-> **Reimaging is a Last Resort**
->
-> **IMPORTANT:** Reimaging should only be performed as a **very last step** after all other troubleshooting methods have been exhausted. Before reimaging:
-> - Attempt standard Windows troubleshooting (SFC scan, DISM)
-> - Check for hardware issues (RAM, cables, connections)
-> - Try startup repair and safe mode
-> - Consult with Software FU members if unsure
->
-> Reimaging completely erases the drive and should only be used when the system is unrecoverable through other means.
+Lab images are specifically configured for lab environments and will not work properly on other systems. Reimaging personal or non-lab computers may result in system failure, data loss, and licensing issues.
+:::
 
-{: .important-title }
-> **TechCentre Reimaging Station**
->
-> This guide is specifically designed for use at the **Reimaging Station in TechCentre**. All necessary equipment, including the Clonezilla USB drive and SATA adapter, should be available at the station. Contact any Software FU member if any equipment is missing.
+:::danger[Reimaging is a last resort]
+**IMPORTANT:** Reimaging should only be performed as a **very last step** after all other troubleshooting methods have been exhausted. Before reimaging:
+- Attempt standard Windows troubleshooting (SFC scan, DISM)
+- Check for hardware issues (RAM, cables, connections)
+- Try startup repair and safe mode
+- Consult with Software FU members if unsure
 
-{: .note }
+Reimaging completely erases the drive and should only be used when the system is unrecoverable through other means.
+:::
+
+:::caution[TechCentre Reimaging Station]
+This guide is specifically designed for use at the **Reimaging Station in TechCentre**. All necessary equipment, including the Clonezilla USB drive and SATA adapter, should be available at the station. Contact any Software FU member if any equipment is missing.
+:::
+
+:::note
 Currently, only SATA drives are supported due to adapter availability. NVMe support will be added once the appropriate adapters are obtained.
+:::
 
 ## Prerequisites
 
@@ -51,14 +43,9 @@ Currently, only SATA drives are supported due to adapter availability. NVMe supp
 - The lab SSD drive to be reimaged (typically 1TB)
 - Basic understanding of BIOS/boot menus
 
-{: .warning }
+:::danger
 **Data Loss Warning:** Reimaging will completely erase all data on the target drive. Ensure any important data is backed up before proceeding. This is an irreversible operation.
-
-## Contents
-{: .no_toc }
-
-1. TOC
-{:toc}
+:::
 
 ## Available Images
 
@@ -69,8 +56,9 @@ The reimaging station has two standard lab images available:
 | **LAB_IMAGE_23R2-WIN10** | Windows 10 (Version 23H2) | Standard Windows 10 lab configuration |
 | **LAB_IMAGE_24H2-WIN11** | Windows 11 (Version 24H2) | Latest Windows 11 lab configuration |
 
-{: .note }
+:::note
 Both images come pre-configured with standard lab software and settings. Choose the image based on the lab requirements or the original configuration of the workstation.
+:::
 
 ## Reimaging Process
 
@@ -83,8 +71,9 @@ Both images come pre-configured with standard lab software and settings. Choose 
 
 <!-- TODO: Add image of the reimaging station setup -->
 
-{: .note }
+:::note
 If you cannot find the Clonezilla USB or SATA adapter, inform any Software FU member.
+:::
 
 2. **Connect the Drive**
    - Connect the lab PC SSD to the SATA adapter
@@ -107,8 +96,9 @@ If you cannot find the Clonezilla USB or SATA adapter, inform any Software FU me
 
 <!-- TODO: Add image of boot menu screen -->
 
-{: .note }
+:::note
 The exact key depends on the motherboard manufacturer. Common keys are F12 (Dell/Lenovo), F11 (HP), or ESC (ASUS).
+:::
 
 2. **Select Clonezilla USB**
    - From the boot menu, select the USB drive (may be labeled as "SanDisk" or show the drive manufacturer)
@@ -133,7 +123,7 @@ The exact key depends on the motherboard manufacturer. Common keys are F12 (Dell
    - Press **Enter**
 
 3. **Start Clonezilla**
-   - Select **Start_Clonezilla** 
+   - Select **Start_Clonezilla**
    - Press **Enter**
 
 <!-- TODO: Add image of Clonezilla main menu -->
@@ -147,8 +137,9 @@ The exact key depends on the motherboard manufacturer. Common keys are F12 (Dell
    - Press **Enter**
    - Wait for Clonezilla to detect available drives
 
-{: .important }
+:::caution
 Make sure you can identify which drive contains the backup images (usually an 1TB NVMe drive inside the station).
+:::
 
 ---
 
@@ -183,8 +174,9 @@ Make sure you can identify which drive contains the backup images (usually an 1T
      - **LAB_IMAGE_24H2-WIN11** for Windows 11
    - Press **Enter**
 
-{: .note }
+:::note
 Image names may have timestamps or version numbers appended. Choose the most recent version unless instructed otherwise.
+:::
 
 6. **Advanced Extra Options**
    - Choose **-k1** to restore the image with proportional partition sizes
@@ -195,8 +187,9 @@ Image names may have timestamps or version numbers appended. Choose the most rec
    - **CAREFULLY** select the lab SSD you want to reimage (typically 1TB)
    - Press **Enter**
 
-{: .warning }
+:::danger
 **CRITICAL:** Double-check you've selected the correct drive! Selecting the wrong drive will erase it permanently. The drive size should match the lab SSD (1TB).
+:::
 
 <!-- TODO: Add image showing target drive selection with warning -->
 
@@ -213,8 +206,9 @@ Image names may have timestamps or version numbers appended. Choose the most rec
    - When asked to check the image before restoration, select **-scr** (skip checking)
    - Press **Enter**
 
-{: .note }
+:::note
 Skipping the check speeds up the process. Only check the image if you suspect corruption.
+:::
 
 3. **Final Confirmation**
    - Clonezilla will ask for final confirmation
@@ -228,8 +222,9 @@ Skipping the check speeds up the process. Only check the image if you suspect co
    - Progress will be displayed on screen
    - **Do not interrupt** the process or power off the system
 
-{: .important }
+:::caution
 The reimaging process typically takes 15-45 minutes depending on image size and drive speed. Do not disconnect drives or power off during this time.
+:::
 
 <!-- TODO: Add image of restoration in progress -->
 
@@ -257,8 +252,9 @@ The reimaging process typically takes 15-45 minutes depending on image size and 
 
 <!-- TODO: Add image of successful Windows boot screen -->
 
-{: .note }
+:::note
 The first boot may take longer as Windows completes initial setup. This is normal.
+:::
 
 ---
 
@@ -322,8 +318,9 @@ The first boot may take longer as Windows completes initial setup. This is norma
 
 ## Additional Notes
 
-{: .note }
+:::note
 This guide will be updated as new equipment (such as NVMe adapters) becomes available. Check back for updates on supported drive types and new image versions.
+:::
 
 ### Image Update Schedule
 
@@ -355,7 +352,3 @@ If you encounter issues not covered in this guide:
 | Image restoration | 15-45 minutes |
 | Verification | 5-10 minutes |
 | **Total** | **30-75 minutes** |
-
----
-
-*Last Updated: 26 November 2025*

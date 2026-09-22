@@ -1,6 +1,9 @@
 ---
 title: NoLoAD Environment Setup Guide
 description: Configure NoLoAD (NoMAD Login AD) on macOS so users can log in with their Domain Account without binding the Mac to APU's Active Directory domain.
+banner:
+  content: |
+    <strong>Archived</strong> — this guide is no longer maintained and may be outdated. Kept for reference only.
 ---
 
 ## Overview

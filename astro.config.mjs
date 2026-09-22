@@ -25,7 +25,15 @@ export default defineConfig({
 			components: {
 				Footer: './src/components/Footer.astro',
 			},
-			customCss: ['./src/styles/custom.css'],
+			customCss: [
+				'@fontsource/lexend/400.css',
+				'@fontsource/lexend/500.css',
+				'@fontsource/lexend/600.css',
+				'@fontsource/lexend/700.css',
+				'@fontsource/jetbrains-mono/400.css',
+				'@fontsource/jetbrains-mono/500.css',
+				'./src/styles/custom.css',
+			],
 			sidebar: [
 				{
 					label: 'macOS Guides',
@@ -38,6 +46,11 @@ export default defineConfig({
 				{
 					label: 'Software FU Procedures',
 					items: [{ autogenerate: { directory: 'software-fu' } }],
+				},
+				{
+					label: 'Archived',
+					collapsed: true,
+					items: [{ autogenerate: { directory: 'archive' } }],
 				},
 			],
 		}),

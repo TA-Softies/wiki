@@ -21,12 +21,13 @@ Every page is a Markdown file under `src/content/docs/`, one folder per sidebar 
 src/content/docs/
 ├── index.mdx              # the hub/home page
 ├── macos/                  # "macOS Guides" section
-│   ├── noload-setup.md
 │   └── utm-setup.md
 ├── windows/                 # "Windows & Lab Systems" section
 │   └── reimaging-guide.md
-└── software-fu/             # "Software FU Procedures" section
-    └── overview.md
+├── software-fu/             # "Software FU Procedures" section
+│   └── overview.md
+└── archive/                 # "Archived" section — see below
+    └── noload-setup.md
 ```
 
 The folder a page lives in **is** its sidebar section — Starlight autogenerates each section's sidebar entries from its folder (configured in `astro.config.mjs` under `starlight().sidebar`), sorted alphabetically by default. A page's URL matches its path, e.g. `src/content/docs/macos/utm-setup.md` → `/macos/utm-setup/`.
@@ -57,6 +58,22 @@ Create a new folder under `src/content/docs/`, add at least one page to it, then
 ```
 
 If it should also appear as a quick-access card on the home page, add a `<Card>` to `src/content/docs/index.mdx`.
+
+### Archiving a page
+
+When a guide is no longer maintained but worth keeping for reference (e.g. `archive/noload-setup.md`):
+
+1. Move the file into `src/content/docs/archive/` (`git mv` to keep its history).
+2. Add a `banner` to its front matter — Starlight renders this as a full-width notice at the top of the page:
+   ```yaml
+   banner:
+     content: |
+       <strong>Archived</strong> — this guide is no longer maintained and may be outdated. Kept for reference only.
+   ```
+3. Fix any links to it elsewhere on the site (home page cards, other guides) so they point at still-current pages instead.
+4. Add an entry to `public/_redirects` from its old path to its new `/archive/...` path, since the URL changes.
+
+The "Archived" sidebar section (`astro.config.mjs`) is collapsed by default and excluded from the home page's "Recently updated" list (`src/components/RecentlyUpdated.astro`), so archiving a page doesn't make it look freshly updated.
 
 ## Callouts
 
@@ -98,12 +115,13 @@ Astro optimizes images referenced this way automatically (resizing, format conve
 
 ## Look and feel
 
-The default Starlight theme is overridden in two places to move away from the "developer docs" look toward a plainer, office/intranet feel:
+The default Starlight theme is overridden to move away from the generic "developer docs" starter look:
 
-- `src/styles/custom.css` — color and font tokens (Starlight's CSS custom properties, e.g. `--sl-color-accent`).
+- **Fonts**: [Lexend](https://fonts.google.com/specimen/Lexend) for UI/body text, [JetBrains Mono](https://www.jetbrains.com/lp/mono/) for code — self-hosted via `@fontsource/*` packages, loaded in `astro.config.mjs`'s `customCss`.
+- **Color**: a purple accent (`src/styles/custom.css`, Starlight's `--sl-color-accent*` tokens), with matching card/aside/hero styling.
 - `src/components/Footer.astro` — adds the author byline described above.
 
-Everything else (sidebar, search, mobile nav, table of contents, dark mode toggle) is Starlight's native behavior, unmodified.
+The site logo/favicon (`src/assets/logo.png`, `public/favicon.ico`) is unrelated to this theming pass and hasn't been changed. Everything else (sidebar, search, mobile nav, table of contents, dark mode toggle) is Starlight's native behavior, unmodified.
 
 ## Deployment
 
